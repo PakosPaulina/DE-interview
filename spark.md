@@ -8,6 +8,16 @@ Key differences between Spark and Hadoop:
 - Processing Model: Spark supports batch, streaming, ML, and graph processing, while Hadoop is mainly batch-oriented.
 Hadoop is better for cheap, large-scale storage (HDFS), while Spark is better for real-time and iterative computations.
 
+# How does Apache Spark handle big data processing?
+
+Apache Spark processes big data using a distributed computing framework that follows a resilient distributed dataset (RDD) model.
+
+How It Works:
+- Parallel Processing: Data is split into partitions and processed across multiple worker nodes.
+- Lazy Evaluation: Transformations are not executed immediately, optimizing execution plans before running.
+- In-Memory Computation: Unlike Hadoop MapReduce, Spark caches intermediate data in memory for faster processing.
+- Fault Tolerance: If a worker node fails, Spark can recompute lost data using lineage information.
+
 # How does Apache Spark differ from PySpark?
 
 * Apache Spark is the big data processing engine written in Scala and Java, running on distributed clusters.
@@ -311,14 +321,123 @@ You can also run SQL queries on a DataFrame after creating a temporary view.
 ```
 
 # Explain Window functions and their usage in PySpark
+
+Window functions in PySpark allow performing calculations across a subset of rows (a window) in a DataFrame without collapsing the dataset like GROUP BY does. These functions are used for running totals, ranking, moving averages, and lead/lag calculations.
+
+Example: Running Total of Sales Per Customer
+```
+    from pyspark.sql import SparkSession
+    from pyspark.sql.window import Window
+    from pyspark.sql.functions import sum
+
+    spark = SparkSession.builder.appName("WindowFunctions").getOrCreate()
+
+    df = spark.createDataFrame([
+        ("Alice", "2024-01-01", 100),
+        ("Alice", "2024-01-02", 200),
+        ("Bob", "2024-01-01", 50),
+        ("Bob", "2024-01-03", 150),
+    ], ["customer", "date", "sales"])
+
+    window_spec = Window.partitionBy("customer").orderBy("date").rowsBetween(Window.unboundedPreceding, 0)
+
+    df.withColumn("running_total", sum("sales").over(window_spec)).show()
+```
 # Explain Broadcast variables and their role in PySpark optimization
+
+Broadcast variables optimize performance by caching a small dataset.
+
+Why Use Broadcast Variables?
+- Avoids expensive shuffles by keeping small reference datasets in memory across worker nodes.
+- Speeds up joins when one table is small and the other is large.
+
 # How do you broadcast a variable, and when should you not use it?
-# How does Apache Spark handle big data processing?
+
+from pyspark.sql.functions import broadcast
+broadcasted_df = broadcast(small_df)
+
+When NOT to Use Broadcasting:
+
+- If the dataset is large, broadcasting can cause memory issues.
+- If a table changes frequently, repeated broadcasting is inefficient.
+
 # Explain the use of partitions in Spark (and bucketing)
+
+* Partitions in Spark:
+- A partition is a logical chunk of data processed in parallel.
+- Spark automatically determines partitions, but users can control them manually.
+- Too few partitions → under-utilized resources
+- Too many partitions → high overhead
+
+* Bucketing groups data by a specific column to reduce shuffling in joins.
+```
+    df.write.format("parquet").bucketBy(4, "customer").saveAsTable("bucketed_table")
+```
 # Explain how the Spark DAG works. Can you explain what happends under the hood?
+
+Apache Spark uses a Directed Acyclic Graph (DAG) to represent the logical execution plan of a job.
+
+* How DAG Works Under the Hood:
+1. User Submits a Job:
+When you run a transformation (e.g., df.filter(...)), Spark does not execute it immediately (lazy evaluation).
+
+2. DAG Construction:
+Spark creates a DAG that represents the logical flow of operations.
+Each transformation adds a new node in the DAG.
+
+3. DAG Splitting into Stages:
+Spark divides the DAG into stages based on shuffle boundaries (wide transformations).
+Narrow transformations (like map, filter) stay within the same stage.
+Wide transformations (like groupBy, join) create new stages due to data shuffling.
+
+4. Task Execution in Executors:
+Each stage is further divided into tasks, which are distributed to worker nodes.
+Spark optimizes execution before running tasks, minimizing data movement.
+
+5. Execution & Fault Tolerance:
+If a task fails, Spark reruns only that partition rather than the entire job.
+
 # What is the difference between narrow and wide transformations? (with examples)
+
+* Narrow Transformations:
+- Data movement occurs within the same partition.
+- No shuffling required, so it’s faster.
+- Example operations: map(), filter(), flatMap().
+
+* Data needs to be shuffled across partitions (expensive).
+- Triggers a new stage in the DAG.
+- Example operations: groupBy(), join(), reduceByKey().
+
 # How does Spark handle small files (It's a performance killer if you don't handle it right)
+
+Small files are a performance killer because each file creates a new task, leading to:
+
+- High overhead on the driver.
+- Too many partitions with too little data.
+
+How to fix it?
+1. Increase spark.sql.files.maxPartitionBytes - Spark will combine small files into larger partitions
+```
+    spark.conf.set("spark.sql.files.maxPartitionBytes", "256MB")
+```
+2. Use Coalesce or Repartition - Reduce unnecessary partitions to optimize reads.
+```
+    df.coalesce(10)  # Merges data into fewer partitions
+    df.repartition(10)  # Redistributes data across partitions
+```
+3. Use Bucketing (for frequent joins on the same column)
+- Saves data in predefined buckets, reducing shuffle.
+- Merge Small Files Before Loading
+
+If working with Parquet or ORC, compact files using a batch job.
+
 # What happens if you cache a DataFrame but don't have enough memory?
+
+If you cache a large DataFrame but don’t have enough memory, Spark will:
+- Evict older cached data (Least Recently Used - LRU).
+- Spill to disk, slowing down performance.
+- If disk space is also low, the job may fail with an OutOfMemory (OOM) error.
+
 # What's the difference between persist(StorageLevel.MEMORY_AND_DISK) and cache()?
 # How do you handle memory related issues in PySpark?
 # How does SparkSQL optimize query execution? (Catalyst optimizer isn't enough - explain)
