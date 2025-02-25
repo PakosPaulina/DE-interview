@@ -439,10 +439,46 @@ If you cache a large DataFrame but don’t have enough memory, Spark will:
 - If disk space is also low, the job may fail with an OutOfMemory (OOM) error.
 
 # What's the difference between persist(StorageLevel.MEMORY_AND_DISK) and cache()?
+
+cache() is a shortcut for persist(StorageLevel.MEMORY_ONLY), meaning it only stores data in memory. If there’s not enough memory, Spark will recompute the DataFrame instead of saving it to disk.
+persist(StorageLevel.MEMORY_AND_DISK) stores the DataFrame in memory first. If there’s insufficient memory, Spark writes the remaining data to disk instead of recomputing it.
+
+When to Use Each?
+Use cache() if you have enough memory and want faster performance.
+Use persist(StorageLevel.MEMORY_AND_DISK) when memory is limited, and you want to avoid recomputation.
+
 # How do you handle memory related issues in PySpark?
+
+Memory issues in PySpark often occur due to large datasets, inefficient transformations, or excessive shuffling. 
+
+Troubleshooting:
+- Adjust Executor Memory: Increase memory allocated to executors.
+- Use coalesce() Instead of repartition() Where Possible: repartition() increases shuffling, while coalesce() reduces the number of partitions efficiently.
+- Use persist() Instead of cache() to spill data to disk when necessary.
+- Broadcast Small Datasets: If joining a small table with a large one, broadcast the small table to prevent shuffling.
+- Use Columnar Storage Formats: Use Parquet or ORC instead of CSV for better memory efficiency.
+- Enable Off-Heap Storage: If working with large datasets, enable off-heap memory to avoid excessive garbage collection.
+
 # How does SparkSQL optimize query execution? (Catalyst optimizer isn't enough - explain)
+
+SparkSQL does more than just Catalyst Optimizer to speed up queries. It optimizes execution in the following ways:
+
+- Catalyst Optimizer: Generates the most efficient query plan by reordering joins, pruning columns, and pushing filters down.
+- Tungsten Execution Engine: Uses bytecode generation to speed up execution by optimizing CPU usage.
+- Whole-Stage Code Generation: Converts query plans into optimized Java bytecode, reducing CPU overhead.
+- Adaptive Query Execution (AQE): Dynamically adjusts partitions and joins at runtime based on actual data.
+- Predicate Pushdown: Pushes filter conditions to the data source (Parquet, ORC, etc.) to reduce data scanned.
+
 # Why does Spark shuffle data, and how can you reduce shuffling?
-# When would you use repartition() vs coalesce()?
+
+Shuffling happens when Spark moves data across partitions for operations like groupBy(), join(), and repartition(). It's expensive because it requires disk I/O, network transfer, and CPU processing.
+
+How to Reduce Shuffling?
+- Use broadcast() for small datasets instead of regular joins.
+- Use coalesce() instead of repartition() when reducing the number of partitions.
+- Avoid distinct() or groupBy() if possible. Consider using map() and reduceByKey() for aggregations instead.
+- Optimize join order using broadcast joins or bucketing to keep related data in the same partitions.
+
 # Can you explain how checkpointing works in Spark Streaming?
 # Discuss the concept of accumulators in PySpark
 # How do you work with JSON nested data in PySpark?

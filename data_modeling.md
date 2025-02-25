@@ -19,7 +19,6 @@ Data engineers typically work with three main types of data models:
 - Data Lake / Semi-Structured Model – Used for big data processing in data lakes. This includes Parquet, JSON, or Avro formats with schema-on-read.
 
 3. Select an Appropriate Storage Solution
-
 - Traditional Databases: PostgreSQL, MySQL for small structured datasets.
 - Cloud Data Warehouses: Snowflake, BigQuery, Redshift for analytical workloads.
 - Data Lakes: AWS S3, Azure Data Lake, or Google Cloud Storage for raw and semi-structured data.
