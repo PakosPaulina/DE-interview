@@ -36,7 +36,7 @@ Use versioning columns (Start_Date, End_Date) or history tables to retain histor
 6. Optimize for Query Performance
 - Use indexes on frequently filtered columns.
 - Apply partitioning (by date, region, or category) for large tables.
-- Use clustering in Snowflake, or Z-Ordering in Databricks to speed up queries.
+- Use clustering in Snowflake, or Z-Ordering in Databricks to speed up queries (or liquid clustering)
 - Implement materialized views or aggregate tables for precomputed summaries.
 
 7. Ensure Data Quality and Integrity
@@ -90,12 +90,12 @@ Denormalization: Store pre-joined data for reporting speed when query performanc
 These are nested data types used in databases like Hive, Spark, and BigQuery for handling semi-structured data.
 
 ARRAY: Stores an ordered list of values, useful for handling multiple values in a single field.
-
 Example: ['Red', 'Blue', 'Green'] in a Color column.
+
 MAP: Stores key-value pairs, similar to a dictionary in Python.
-
 Example: {'size': 'L', 'color': 'Blue'} for storing product attributes.
-STRUCT: Groups multiple fields into a single column, similar to a nested JSON object.
 
+STRUCT: Groups multiple fields into a single column, similar to a nested JSON object.
 Example: {"Address": {"Street": "123 Main St", "City": "NYC"}} in a single column.
+
 These types are useful for handling JSON-like data in modern analytical databases.

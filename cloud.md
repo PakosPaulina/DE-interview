@@ -17,9 +17,10 @@ AWS Redshift, Google BigQuery, Snowflake
 Relational Databases: AWS RDS, Azure SQL Database, Google Cloud SQL
 NoSQL Databases: DynamoDB, CosmosDB, Firebase (for key-value and document storage)
 
-* Data Lakes (Raw Storage for ETL & AI/ML Workloads)
-- AWS Lake Formation, Databricks Delta Lake, Azure Data Lake Storage
-- Stores structured and unstructured data together for later processing
+* Data Lakes Governance layer
+AWS Lake Formation, Databricks Delta Lake
+Lake Formation: metadata catalog, access control, fine-grained security on S3 tables
+Delta Lake: schema enforcement, ACID transactions, incremental updates
 
 2. Processing Large Data Volumes in the Cloud
 Once stored, large datasets need to be processed efficiently using cloud computing solutions:

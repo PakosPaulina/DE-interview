@@ -21,7 +21,7 @@ df.drop_duplicates(inplace=True)
 df["date_of_birth"] = pd.to_datetime(df["date_of_birth"], errors="coerce")  # Convert date column
 df["salary"] = df["salary"].astype(float)  # Convert salary to float
 
-# 4. Standardize Text Columns
+# 4. Standardize  Text Columns
 df["name"] = df["name"].str.strip().str.title()  # Remove whitespace and capitalize names
 df["email"] = df["email"].str.lower()  # Convert emails to lowercase
 df["description"] = df["description"].str.replace(r"[^a-zA-Z0-9 ]", "", regex=True)  # Remove special characters

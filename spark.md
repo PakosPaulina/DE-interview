@@ -485,6 +485,8 @@ How to Reduce Shuffling?
 # How do you integrate PySpark with other Python libraries NumPy or Pandas?
 # Explain the process of deploying PySpark applications in a cluster
 # How do you debug PySpark Applications effectively?
+# narrow vs wide transformations
+
 
 
 Advanced:
