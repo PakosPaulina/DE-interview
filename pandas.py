@@ -27,17 +27,14 @@ df.describe()        # Statistical summary of numeric columns
 # Selecting Data 
 df['col']            # Select a single column
 df[['col1', 'col2']] # Select multiple columns
-
 df.loc[row_filter, col_filter]  # Label-based row and column selection
 df.iloc[row_idx, col_idx]       # Position-based row and column selection
-
 df.at[row, col]      # Fast access to a single value (label-based)
 df.iat[row, col]     # Fast access to a single value (index-based)
 
 # Cleaning data
 df.isna()            # Detect missing values
 df.notna()           # Detect non-missing values
-
 df.dropna()          # Remove rows with missing values
 df.fillna()          # Replace missing values
 df.replace()         # Replace specific values
