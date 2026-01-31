@@ -24,7 +24,7 @@ How It Works:
 * PySpark is the Python API for Apache Spark, allowing developers to use Spark's power with Python.
 * PySpark provides Python-based DataFrame APIs, ML libraries (MLlib), and streaming support, making Spark accessible to Python developers.
 
-# Explain the difference between RDD (Resilient Distributed Dataset), DataFrame and DataSet in PySpark
+# Explain the difference between RDD (Resilient Distributed Dataset), DataFrame and DataSet in Spark
 
 In Spark, there are three main types of data structures that are commonly used: RDD, DataFrame, and Dataset. Each of these structures has its own unique characteristics and purposes, making them suitable for different scenarios.
 

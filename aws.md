@@ -5,3 +5,4 @@
 # Glue (catalog vs jobs)
 # IAM basics (who can read/write data)
 # Cost considerations (huge at scale)
+# logging errors
