@@ -1,13 +1,5 @@
-# Write a query to retrieve the top highest salaries from an employee table
-    ``
-    SELECT salary 
-    FROM employees
-    ORDER BY salary DESC
-    LIMIT 10;
-    ``
 # Explain the difference between a clustered and non-clustered index
-
-- A clustered index determines the physical order of data in a table and can only exist once per table. The primary key automatically creates a clustered index. A non-clustered index, on the other hand, is a separate structure that stores pointers to the actual data without changing its physical order. A table can have multiple non-clustered indexes, which improve search performance but require extra storage.
+A clustered index determines the physical order of data in a table and can only exist once per table. The primary key automatically creates a clustered index. A non-clustered index, on the other hand, is a separate structure that stores pointers to the actual data without changing its physical order. A table can have multiple non-clustered indexes, which improve search performance but require extra storage.
 ```
     - Clustered Index (automatically created for Primary Key)
         CREATE TABLE Employees (
@@ -21,7 +13,6 @@
 
 ```
 # What are window functions in SQL? Provide examples
-
 Window functions perform calculations across a set of rows related to the current row without collapsing them into a single result. These are often used for running totals, ranking, and moving averages.
 
 - Common Window Functions:
@@ -35,7 +26,7 @@ AVG() OVER(): Moving average.
 # What's the difference between RANK vs DENSE_RANK vs ROW_NUMBER?
 All three are window functions used to assign a rank or number to rows based on a specified order. However, they behave differently when there are duplicate (tied) values.
 
-* ROW_NUMBER() - assigns a unique wor number to each row within a partition, with no gaps (so no duplicates)
+* ROW_NUMBER() - assigns a unique row number to each row within a partition, with no gaps (so no duplicates)
 * RANK() - Assigns the same rank to duplicate values but skips the next ranks(s)
 * DENSE_RANK() - Similar to RANK(), but does NOT skip numbers after duplicates.
 
@@ -61,7 +52,6 @@ Without QUALIFY, you would need a subquery to filter the results.
 Spark and Databricks don't support it.
 
 # How would you optimize a query that takes too long to execute?
-
 - Use indexing:
     CREATE INDEX idx_order_date ON Orders(OrderDate);
 - Avoid SELECT * (only select require columns)
@@ -94,7 +84,6 @@ OR
 
 ```
 # How do you handle null values in SQL?
-
 - Replace NULL values with a default value using COALESCE()
     SELECT name, COALESCE(salary, 0) AS salary FROM employees;
 - Filter NULL values using IS NOT NULL or IS NULL
@@ -104,14 +93,12 @@ OR
        CASE WHEN salary IS NULL THEN 'Not Available' ELSE salary END AS salary_status FROM employees;
 
 # Explain the difference between DELETE, TRUNCATE and DROP
-
 - DELETE: Removes specific rows from a table using a WHERE clause. It can be rolled back (if inside a transaction). We can also remove all data from a table with a DELETE FROM table;
 - TRUNCATE: Removes all rows from a table but keeps the table structure. It is faster than DELETE and cannot be rolled back in most databases.
     TRUNCATE TABLE employees;
 - DROP: Completely removes a table (including its structure), making it irreversible.
 
 # What is a CTE (Common table expression) and how is it different from a subquery. 
-
 A CTE is a temporary result set that improves query readability and reusability. Unlike subqueries, CTEs can be referenced multiple times in the main query (deduped above is a CTE). Subqueries are embedded inside other queries and are executed once per use.
 
 Subquery:
@@ -172,7 +159,6 @@ Benefits:
 * Precompile for faster execution
 
 # How do you ensure data quality in a data warehouse? 
-
 * Using constraints (NOT NULL, CHECK, UNIQUE)
 * Remove duplicates with DISTINCT or ROW_NUMBER() OVER() 
 * Handle NULL values with COALESCE() or CASE WHEN

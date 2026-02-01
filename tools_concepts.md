@@ -36,17 +36,14 @@ ELT (Extract → Load → Transform)
 Works best for: when using cloud-based warehouses, when dealing with large, unstructured data (JSON, logs, IoT data), when raw data needs to be stored for later processing, for ML and & AI workloads
 
 # What is the difference between batch processing and stream processing?
-
 Batch processing handles data in large, scheduled chunks, while stream processing handles data continuously in real time. Batch processing is best for historical analysis, reports, and ETL workflows that do not require immediate updates. Stream processing is used when low latency is essential, such as fraud detection, stock market tracking, and IoT sensor monitoring.
 
 # Describe how you would design a data pipeline for processing real-time data?
-
 A real-time data pipeline starts with a data ingestion layer, using tools like Apache Kafka or AWS Kinesis to collect and buffer incoming data. The data is then processed using stream processing frameworks such as Apache Flink, Spark Streaming, or AWS Lambda, which clean, enrich, and analyze the data. The processed data is stored in a fast, queryable database such as Apache Druid, ClickHouse, or Elasticsearch. Finally, a visualization tool like Grafana or Tableau is used to monitor real-time trends.
 
 For example, in a real-time fraud detection system, bank transactions flow into Kafka, a Flink job detects suspicious patterns, and flagged transactions are sent to an alert system in under a second.
 
 # How do you monitor and maintain data pipelines?
-
 Monitoring involves setting up logging, alerting, and performance tracking for each pipeline stage. Logs and metrics can be collected using tools like Prometheus, Datadog, or AWS CloudWatch. Alerts can be configured to notify engineers when a job fails, runs longer than expected, or produces unexpected results.
 
 Maintaining pipelines requires handling failures with retries, detecting schema changes to prevent breakages, and automating testing using tools like Great Expectations. Version control with Git helps track changes and rollback issues when needed.
@@ -54,7 +51,6 @@ Maintaining pipelines requires handling failures with retries, detecting schema 
 For example, in Apache Airflow, you can set up retry logic for a failing job and send an email alert if it still fails after multiple attempts.
 
 # What is the role of Apache Kafka in data engineering?
-
 Apache Kafka is a real-time event streaming platform that acts as a central hub for data movement between systems. It ensures fault tolerance, scalability, and low-latency processing of high-volume event data.
 
 Kafka is commonly used for real-time data pipelines where data producers (like web apps, IoT devices, or databases) send events to Kafka topics. Consumers (such as Spark Streaming or Flink) process these events for analytics, monitoring, or machine learning applications.
@@ -62,7 +58,6 @@ Kafka is commonly used for real-time data pipelines where data producers (like w
 For example, in ride-hailing applications, Kafka can capture real-time trip updates from drivers and update customer apps instantly.
 
 # How do you ensure data quality during ETL processes?
-
 Ensuring data quality involves validating, cleaning, and monitoring data before, during, and after processing. Validation checks for missing, duplicate, or incorrectly formatted data before loading it into the system. Schema enforcement ensures data types and structures remain consistent.
 
 Automated data quality frameworks like Great Expectations and dbt can catch data inconsistencies early. Anomaly detection techniques, such as statistical checks or machine learning models, help flag unusual patterns.
@@ -70,7 +65,6 @@ Automated data quality frameworks like Great Expectations and dbt can catch data
 For example, before loading a customer dataset into a warehouse, an ETL pipeline might check for missing emails and enforce a rule that customer IDs must be unique.
 
 # What is the difference between OLAP and OLTP databases?
-
 OLAP (Online Analytical Processing) and OLTP (Online Transaction Processing) serve different purposes in data systems.
 
 OLTP databases are optimized for handling fast, real-time transactions, such as processing e-commerce purchases or banking transactions. They use normalized schemas to minimize data redundancy and ensure high concurrency.
@@ -80,7 +74,6 @@ OLAP databases are designed for analytical queries on large datasets. They aggre
 For example, an OLTP system might handle a customer's order placement, while an OLAP system would generate a report analyzing monthly sales trends.
 
 # Describe the architecture of a cloud-based data warehouse like Snowflake or BigQuery.
-
 Cloud data warehouses like Snowflake and BigQuery follow a decoupled architecture where storage and compute resources are separate, allowing them to scale independently.
 
 * Storage Layer: Stores structured and semi-structured data in a columnar format, enabling efficient querying and compression.
@@ -91,7 +84,6 @@ Cloud data warehouses like Snowflake and BigQuery follow a decoupled architectur
 For example, in Snowflake, data is stored in cloud object storage, and queries run in compute clusters that can be dynamically resized without affecting data storage.
 
 # How do you handle schema changes in an ETL pipeline
-
 Schema changes, such as adding, removing, or renaming columns, can break an ETL pipeline if not handled properly. Strategies for managing schema evolution include:
 
 * Schema Detection: Use schema inference tools like dbt or Great Expectations to track changes before they impact the pipeline.
@@ -102,7 +94,6 @@ Schema changes, such as adding, removing, or renaming columns, can break an ETL 
 For example, if a new column is added to a customer dataset, the ETL job can be updated to populate it without failing for existing records.
 
 # What is spilling to disk mean in distributed compute?
-
 "Spilling to disk" occurs when a distributed computing system runs out of memory (RAM) and must temporarily store data on disk to complete a computation. This happens when processing large datasets that exceed available memory.
 
 Why It Happens? Queries or transformations that require large joins, aggregations, or sorting can exceed available memory.
